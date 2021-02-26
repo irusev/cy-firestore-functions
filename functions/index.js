@@ -65,17 +65,24 @@ exports.writeApplication = functions.https.onRequest((request, response) => {
       }
 
       if(errorMessage === '') {
-        const data = {
+        let data = {
           full_name: body.name,
           phone: body.phone,
           email: body.email,
           city: body.location,
-          amount: (body.sum === undefined) ? 0 : body.sum,
-          source: source,
-          address: (body.address === undefined) ? 0 : body.address,
-          egn: (body.egn === undefined) ? 0 : body.egn
+          source: source
         };
 
+        if(body.sum !== undefined) {
+          data.amount = body.sum;
+        }
+        if(body.address !== undefined) {
+          data.address = body.address;
+        }
+        if(body.egn !== undefined) {
+          data.egn = body.egn;
+        }
+        
         const PROJECTID = 'fir-test-c82d3';
         const COLLECTION_NAME = 'loans';
         const firestore = new Firestore({
