@@ -74,7 +74,7 @@ exports.writeApplication = functions.https.onRequest((request, response) => {
         };
 
         if(body.sum !== undefined) {
-          data.amount = body.sum;
+          data.amount = parseInt(body.sum);
         }
         if(body.address !== undefined) {
           data.address = body.address;
