@@ -82,7 +82,10 @@ exports.writeApplication = functions.https.onRequest((request, response) => {
         if(body.egn !== undefined) {
           data.egn = body.egn;
         }
-        
+        if(body.serviceBy !== undefined) {
+          data.service_by = parseInt(body.serviceBy);
+        }
+
         const PROJECTID = 'fir-test-c82d3';
         const COLLECTION_NAME = 'loans';
         const firestore = new Firestore({
@@ -91,9 +94,7 @@ exports.writeApplication = functions.https.onRequest((request, response) => {
         });
 
         try {
-          console.log('writing');
           firestore.collection(COLLECTION_NAME).add(data).catch(err => console.log(err));
-          console.log('written');
         } catch (e) {
           response.status(400).send(e.message());
           break;
