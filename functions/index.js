@@ -19,6 +19,7 @@ exports.writeApplication = functions.https.onRequest((request, response) => {
       const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
       const [username, password] = credentials.split(':');
 
+      console.log('invoked ', username);
       if(username === undefined || password === undefined) {
         response.status(400).send("Invalid auth method");
         break;
@@ -37,6 +38,7 @@ exports.writeApplication = functions.https.onRequest((request, response) => {
       if(body.creditType === undefined || (body.creditType !== "personal" && body.creditType !== "mortgage")) {
         errorMessage = "Invalid parameter 'creditType'"
       }
+      console.log('invoked for ' + body.name);
       if(body.name === undefined) {
         errorMessage = "Invalid parameter 'name'"
       }
@@ -94,12 +96,13 @@ exports.writeApplication = functions.https.onRequest((request, response) => {
         });
 
         try {
+          console.log('writing');
           firestore.collection(COLLECTION_NAME).add(data).catch(err => console.log(err));
+          console.log('written');
         } catch (e) {
           response.status(400).send(e.message());
           break;
         }
-
         response.status(200).send("Success! Application is created");
       } else {
         response.status(400).send(errorMessage);
