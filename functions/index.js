@@ -38,7 +38,7 @@ exports.writeApplication = functions.https.onRequest((request, response) => {
       if(body.creditType === undefined || (body.creditType !== "personal" && body.creditType !== "mortgage")) {
         errorMessage = "Invalid parameter 'creditType'"
       }
-      console.log('invoked for ' + body.name);
+      console.log('FUNCTION INVOKED for ' + body.name);
       if(body.name === undefined) {
         errorMessage = "Invalid parameter 'name'"
       }
@@ -57,13 +57,13 @@ exports.writeApplication = functions.https.onRequest((request, response) => {
           errorMessage = "Invalid parameter 'sum'"
         }
 
-        if(body.egn === undefined) {
-          errorMessage = "Invalid parameter 'egn'"
-        }
+        // if(body.egn === undefined) {
+        //   errorMessage = "Invalid parameter 'egn'"
+        // }
 
-        if(body.address === undefined) {
-          errorMessage = "Invalid parameter 'address'"
-        }
+        // if(body.address === undefined) {
+        //   errorMessage = "Invalid parameter 'address'"
+        // }
       }
 
       if(errorMessage === '') {
@@ -97,14 +97,17 @@ exports.writeApplication = functions.https.onRequest((request, response) => {
 
         try {
           console.log('writing');
-          firestore.collection(COLLECTION_NAME).add(data).catch(err => console.log(err));
+          firestore.collection(COLLECTION_NAME).add(data).catch(err => console.log('bzz ' + err));
           console.log('written');
         } catch (e) {
+          console.log('returning 400 ' + e);
           response.status(400).send(e.message());
           break;
         }
+        console.log('returning 200 success');
         response.status(200).send("Success! Application is created");
       } else {
+        console.log('Returning 400', errorMessage);
         response.status(400).send(errorMessage);
       }
 
